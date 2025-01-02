@@ -30,6 +30,9 @@ const CardWrapper = ({
 			<CardHeader>
 				<Header label={headerLabel} />
 			</CardHeader>
+			<CardContent>
+				{children}
+			</CardContent>
 			{showSocial && (
 				<CardFooter>
 					<Social />
@@ -42,6 +45,9 @@ const CardWrapper = ({
 					href={backButtonHref}
 				/>
 			</CardFooter>
+
+
+
 		</Card>
 	)
 }
