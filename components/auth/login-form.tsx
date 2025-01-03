@@ -15,14 +15,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import FormError from "../form-error";
 import FormSuccess from "../form-success";
 import { login } from "@/actions/login";
 
 const LoginForm = () => {
 	const [errorMessageVisible, setErrorMessageVisible] = useState(false);
-
+	const [isPending, startTransition] = useTransition();
+	const [error, setError] = useState<string | undefined>("");
+	const [success, setSuccess] = useState<string | undefined>("");
 	const form = useForm<LoginSchemaType>({
 		resolver: zodResolver(LoginSchema),
 		defaultValues: {
@@ -42,7 +44,18 @@ const LoginForm = () => {
 	}, [errorMessageVisible]);
 
 	const onSubmit = (values: LoginSchemaType) => {
-		login(values);
+
+		// Clear the messages before
+		setError("");
+		setSuccess("");
+
+		startTransition(() => {
+			login(values)
+				.then((data) => {
+					setError(data.error);
+					setSuccess(data.success);
+				})
+		})
 		console.log("Form Data:", values);
 		// Handle login logic here
 	};
@@ -77,6 +90,7 @@ const LoginForm = () => {
 										<FormControl>
 											<Input
 												{...field}
+												disabled={isPending}
 												placeholder="john.doe@example.com"
 												type="email"
 												className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
@@ -101,6 +115,7 @@ const LoginForm = () => {
 										<FormControl>
 											<Input
 												{...field}
+												disabled={isPending}
 												placeholder="Enter your password"
 												type="password"
 												className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
@@ -113,10 +128,11 @@ const LoginForm = () => {
 								)}
 							/>
 						</div>
-						<FormError message="Something went wrong" />
-						<FormSuccess message="Successful" />
+						<FormError message={error} />
+						<FormSuccess message={success} />
 						<Button
 							type="submit"
+							disabled={isPending}
 							className="w-full bg-slate-800 text-white font-semibold py-2 rounded-lg shadow-md hover:bg-slate-600 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
 						>
 							Login
