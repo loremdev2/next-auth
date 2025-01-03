@@ -16,6 +16,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
+import FormError from "../form-error";
+import FormSuccess from "../form-success";
+import { login } from "@/actions/login";
 
 const LoginForm = () => {
 	const [errorMessageVisible, setErrorMessageVisible] = useState(false);
@@ -38,8 +41,9 @@ const LoginForm = () => {
 		}
 	}, [errorMessageVisible]);
 
-	const onSubmit = (data: LoginSchemaType) => {
-		console.log("Form Data:", data);
+	const onSubmit = (values: LoginSchemaType) => {
+		login(values);
+		console.log("Form Data:", values);
 		// Handle login logic here
 	};
 
@@ -79,9 +83,7 @@ const LoginForm = () => {
 											/>
 										</FormControl>
 										{errorMessageVisible && (
-											<FormMessage className="text-red-500 text-sm mt-1">
-												Email is required.
-											</FormMessage>
+											<FormMessage className="text-red-500 text-sm mt-1" />
 										)}
 									</FormItem>
 								)}
@@ -104,15 +106,18 @@ const LoginForm = () => {
 												className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
 											/>
 										</FormControl>
-										<FormMessage className="text-red-500 text-sm mt-1" />
+										{errorMessageVisible && (
+											<FormMessage className="text-red-500 text-sm mt-1" />
+										)}
 									</FormItem>
 								)}
 							/>
 						</div>
-
+						<FormError message="Something went wrong" />
+						<FormSuccess message="Successful" />
 						<Button
 							type="submit"
-							className="w-full bg-indigo-600 text-white font-semibold py-2 rounded-lg shadow-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+							className="w-full bg-slate-800 text-white font-semibold py-2 rounded-lg shadow-md hover:bg-slate-600 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
 						>
 							Login
 						</Button>
