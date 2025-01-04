@@ -13,10 +13,10 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { useEffect, useState, useTransition } from "react";
-import FormError from "../form-error";
-import FormSuccess from "../form-success";
+import FormError from "@/components/form-error";
+import FormSuccess from "@/components/form-success";
 import { register } from "@/actions/register";
 
 const RegisterForm = () => {
